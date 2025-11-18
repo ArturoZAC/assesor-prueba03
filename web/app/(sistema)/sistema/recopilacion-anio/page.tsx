@@ -25,8 +25,8 @@ export default async function page({ searchParams }: { searchParams: Promise<{ y
   return (
     <div className="w-full">
       <TablaGeneralLegacy
-        columns={columnasRecopilacionAnios}
-        data={data}
+        columns={columnasRecopilacionAnios as any}
+        data={data as any}
         actionClick="agregar"
         filters={[]}
         textAdd="Agregar Tipo de Cambio"
