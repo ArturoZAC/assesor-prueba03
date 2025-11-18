@@ -16,6 +16,17 @@ import {
 } from "@tanstack/react-table";
 import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 
+// Tipo de resaltarFila
+type ResaltarFila = {
+  active: boolean;
+  data: { label: string }[];
+};
+
+// Tipo de fila de la tabla, extendiendo RowData
+export type TDataConResaltarFila = RowData & {
+  resaltarFila?: ResaltarFila;
+};
+
 export type TablaDatosProps<TData extends RowData> = {
   data: TData[];
   columns: ColumnDef<TData>[];
@@ -64,7 +75,7 @@ export function TooltipFilaCompleta({ children, data }: TooltipFilaCompletaProps
   );
 }
 
-export function TablaDatosLegacy<TData extends RowData>({
+export function TablaDatosLegacy({
   data,
   columns,
   globalFilter,
@@ -74,8 +85,8 @@ export function TablaDatosLegacy<TData extends RowData>({
   actionClick,
   hiddenAddButton,
 }: {
-  data: TData[];
-  columns: ColumnDef<TData>[];
+  data: TDataConResaltarFila[];
+  columns: ColumnDef<TDataConResaltarFila>[];
   globalFilter: string;
   setGlobalFilter: Dispatch<SetStateAction<string>>;
   modalRenderAdd?: React.ReactNode;
@@ -88,7 +99,7 @@ export function TablaDatosLegacy<TData extends RowData>({
   const [rowSelection, setRowSelection] = useState<{ [key: string]: boolean }>({});
 
   const { setModalContent, openModal, setSelectedRow } = useAuth();
-  const cols = useMemo<ColumnDef<TData>[]>(
+  const cols = useMemo<ColumnDef<TDataConResaltarFila>[]>(
     () => [
       {
         id: "select",
@@ -121,7 +132,7 @@ export function TablaDatosLegacy<TData extends RowData>({
     [columns]
   );
 
-  const table = useReactTable<TData>({
+  const table = useReactTable<TDataConResaltarFila>({
     data,
     columns: cols,
     state: {
