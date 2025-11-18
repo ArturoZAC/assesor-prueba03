@@ -17,7 +17,17 @@ import { FaTableCells } from "react-icons/fa6";
 import * as XLSX from "xlsx";
 import { toast } from "sonner";
 
-export function TablaGeneralLegacy<TData extends RowData>({
+export type ResaltarFila = {
+  active: boolean;
+  data: { label: string }[];
+};
+
+// Define un TData que siempre tenga resaltarFila opcional
+export type TDataConResaltarFila = RowData & {
+  resaltarFila?: ResaltarFila;
+};
+
+export function TablaGeneralLegacy({
   search,
   data,
   columns,
@@ -36,8 +46,8 @@ export function TablaGeneralLegacy<TData extends RowData>({
   hideExportarExcel,
 }: {
   search?: string;
-  data: TData[];
-  columns: ColumnDef<TData>[];
+  data: TDataConResaltarFila[];
+  columns: ColumnDef<TDataConResaltarFila>[];
   modalRenderAdd?: ReactNode;
   modalRenderEdit?: ReactNode;
   pagination?: Pagination;
@@ -70,7 +80,7 @@ export function TablaGeneralLegacy<TData extends RowData>({
     openModal();
   }
 
-  const cols = useMemo<ColumnDef<TData>[]>(
+  const cols = useMemo<ColumnDef<TDataConResaltarFila>[]>(
     () => [
       {
         id: "select",
@@ -103,7 +113,7 @@ export function TablaGeneralLegacy<TData extends RowData>({
     [columns]
   );
 
-  const table = useReactTable<TData>({
+  const table = useReactTable<TDataConResaltarFila>({
     data,
     columns: cols,
     state: {

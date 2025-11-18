@@ -1,6 +1,8 @@
+const url = process.env.NEXT_PUBLIC_API_URL;
+
 export const Global = {
-  url: "http://localhost:4335/api",
-  urlImages: "http://localhost:4335",
+  url: `${url}/api`,
+  urlImages: url,
 };
 
 // export const Global = {
